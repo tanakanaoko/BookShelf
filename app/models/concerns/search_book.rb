@@ -12,13 +12,17 @@ module SearchBook
       condition = table[:id].eq(category_id)
       where(condition)
     }
+    
 
     scope :search, lambda { |s|
       r = self
       r = r.search_title(s[:s_title]) if s[:s_title].present?
       r = r.joins(:categories).search_category(s[:s_category]) if s[:s_category].present?
-      next r if r != self
+     if r != self
+      r
+     else
       where({})
-    }
-  end
+     end
+     }
+    end
 end
